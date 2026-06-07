@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 اختبار التنشئة الاجتماعية</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+  :root {
+    --pink: #FFB3C6;
+    --lavender: #C9B8E8;
+    --mint: #B5EAD7;
+    --peach: #FFDAC1;
+    --sky: #AED9E0;
+    --yellow: #FFF1A8;
+    --coral: #FF6B6B;
+    --green: #4CAF50;
+    --purple: #7C5CBF;
+    --dark: #3A3A5C;
+    --white: #FFFAF7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #FFF0F5 0%, #F0F0FF 50%, #F0FFF8 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  /* Floating background bubbles */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(201,184,232,0.3), transparent);
+    border-radius: 50%;
+    animation: float1 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(181,234,215,0.3), transparent);
+    border-radius: 50%;
+    animation: float2 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,30px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-20px)} }
+
+  .container {
+    max-width: 750px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+    animation: slideDown 0.6s ease;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--purple);
+    text-shadow: 2px 2px 0px rgba(199,168,239,0.4);
+  }
+  .header p { color: #888; font-size: 0.95rem; margin-top: 5px; }
+
+  @keyframes slideDown { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: white;
+    border-radius: 16px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    flex: 1;
+    min-width: 120px;
+    border: 2px solid transparent;
+  }
+  .stat-box.score { border-color: var(--pink); }
+  .stat-box.progress { border-color: var(--lavender); }
+  .stat-box.timer { border-color: var(--peach); }
+  .stat-box .emoji { font-size: 1.3rem; }
+  .stat-box .label { font-size: 0.75rem; color: #999; }
+  .stat-box .value { font-size: 1.2rem; font-weight: 900; color: var(--dark); }
+
+  /* TIMER BAR */
+  .timer-track {
+    background: #F0F0F0;
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .timer-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--mint), var(--sky));
+    transition: width 1s linear, background 0.5s;
+  }
+  .timer-fill.warning { background: linear-gradient(90deg, var(--peach), #FF9944); }
+  .timer-fill.danger { background: linear-gradient(90deg, #FF9944, var(--coral)); }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: white;
+    border-radius: 28px;
+    padding: 35px 40px;
+    box-shadow: 0 10px 40px rgba(124,92,191,0.12);
+    margin-bottom: 20px;
+    border: 3px solid var(--lavender);
+    animation: cardIn 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(201,184,232,0.2), transparent);
+    border-radius: 50%;
+    transform: translate(30px,-30px);
+  }
+
+  @keyframes cardIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+
+  .q-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    background: rgba(201,184,232,0.3);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .q-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.8;
+    margin-bottom: 30px;
+  }
+
+  /* ANSWER BUTTONS */
+  .answers {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .btn-answer {
+    flex: 1;
+    max-width: 200px;
+    padding: 18px 25px;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-answer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .btn-answer:hover::after { opacity: 0.2; }
+  .btn-answer:active { transform: scale(0.96); }
+
+  .btn-true {
+    background: linear-gradient(135deg, #B5EAD7, #7ECFB0);
+    color: #2D7A5A;
+    border-color: #7ECFB0;
+    box-shadow: 0 6px 20px rgba(126,207,176,0.4);
+  }
+  .btn-false {
+    background: linear-gradient(135deg, #FFB3C6, #FF8FAB);
+    color: #8B1A33;
+    border-color: #FF8FAB;
+    box-shadow: 0 6px 20px rgba(255,143,171,0.4);
+  }
+  .btn-answer:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* CHECK BUTTON */
+  .btn-check {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--purple), #9B7FD4);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 6px 20px rgba(124,92,191,0.4);
+    display: none;
+  }
+  .btn-check:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124,92,191,0.5); }
+  .btn-check:active { transform: translateY(0); }
+  .btn-check.visible { display: block; animation: fadeIn 0.3s ease; }
+
+  /* FEEDBACK */
+  .feedback {
+    border-radius: 20px;
+    padding: 20px 25px;
+    margin-top: 20px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .feedback.correct {
+    background: linear-gradient(135deg, rgba(181,234,215,0.5), rgba(126,207,176,0.3));
+    border: 2px solid #7ECFB0;
+  }
+  .feedback.wrong {
+    background: linear-gradient(135deg, rgba(255,179,198,0.5), rgba(255,143,171,0.3));
+    border: 2px solid #FF8FAB;
+  }
+  .feedback.visible { display: block; }
+  .feedback .fb-title { font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }
+  .feedback.correct .fb-title { color: #2D7A5A; }
+  .feedback.wrong .fb-title { color: #8B1A33; }
+  .feedback .fb-text { font-size: 0.95rem; color: var(--dark); line-height: 1.7; }
+
+  /* NEXT BUTTON */
+  .btn-next {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #AED9E0, #7ECFB0);
+    color: var(--dark);
+    border: none;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s;
+    display: none;
+    box-shadow: 0 6px 20px rgba(174,217,224,0.4);
+  }
+  .btn-next:hover { transform: translateY(-2px); }
+  .btn-next.visible { display: block; animation: fadeIn 0.4s ease 0.2s both; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: #F0F0F0;
+    border-radius: 10px;
+    height: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--lavender), var(--purple));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  /* SELECTED STATE */
+  .btn-answer.selected-true {
+    border-color: #2D7A5A;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(126,207,176,0.6);
+  }
+  .btn-answer.selected-false {
+    border-color: #8B1A33;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255,143,171,0.6);
+  }
+  .btn-answer.revealed-correct { background: linear-gradient(135deg, #B5EAD7, #7ECFB0); opacity: 1; }
+  .btn-answer.revealed-wrong { background: linear-gradient(135deg, #FFB3C6, #FF8FAB); opacity: 0.5; }
+
+  /* CONFETTI OVERLAY */
+  .celebration {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.95);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+    animation: fadeInFull 0.5s ease;
+  }
+  .celebration.show { display: flex; }
+  @keyframes fadeInFull { from{opacity:0} to{opacity:1} }
+
+  .celebration h2 { font-size: 2.5rem; font-weight: 900; color: var(--purple); margin-bottom: 10px; }
+  .celebration .final-score { font-size: 3.5rem; font-weight: 900; color: var(--dark); margin: 20px 0; }
+  .celebration .score-label { color: #888; font-size: 1rem; }
+  .celebration .chars { font-size: 4rem; margin-bottom: 15px; animation: bounce 1s ease infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+
+  .confetti-piece {
+    position: fixed;
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .btn-restart {
+    padding: 16px 40px;
+    background: linear-gradient(135deg, var(--purple), #9B7FD4);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 6px 20px rgba(124,92,191,0.4);
+    transition: all 0.2s;
+  }
+  .btn-restart:hover { transform: translateY(-3px); }
+
+  /* START SCREEN */
+  .start-screen {
+    background: white;
+    border-radius: 28px;
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(124,92,191,0.12);
+    border: 3px solid var(--lavender);
+  }
+  .start-screen .big-emoji { font-size: 5rem; margin-bottom: 20px; animation: bounce 2s ease infinite; }
+  .start-screen h2 { font-size: 1.8rem; font-weight: 900; color: var(--purple); margin-bottom: 10px; }
+  .start-screen p { color: #888; font-size: 1rem; line-height: 1.8; margin-bottom: 30px; }
+  .btn-start {
+    padding: 18px 50px;
+    background: linear-gradient(135deg, var(--purple), #9B7FD4);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(124,92,191,0.4);
+    transition: all 0.2s;
+  }
+  .btn-start:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124,92,191,0.5); }
+
+  .quiz-area { display: none; }
+  .quiz-area.active { display: block; animation: slideDown 0.5s ease; }
+  .start-screen.hidden { display: none; }
+
+  /* Grade display */
+  .grade-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- START SCREEN -->
+  <div class="start-screen" id="startScreen">
+    <div class="big-emoji">🎓</div>
+    <h2>اختبار التنشئة الاجتماعية</h2>
+    <p>
+      50 سؤالاً بأسلوب الامتحانات الجامعية 🎯<br>
+      أسئلة صح وخطأ مع شرح فوري للإجابات<br>
+      لكل سؤال <strong>20 ثانية</strong> — فكّر بسرعة! ⏱️
+    </p>
+    <button class="btn-start" onclick="startQuiz()">🚀 ابدأ الاختبار!</button>
+  </div>
+
+  <!-- QUIZ AREA -->
+  <div class="quiz-area" id="quizArea">
+    <div class="header">
+      <h1>🌸 اختبار التنشئة الاجتماعية</h1>
+      <p>فكّر جيداً قبل الإجابة — الأسئلة فيها تريكات! 🧠</p>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-box score">
+        <span class="emoji">⭐</span>
+        <div>
+          <div class="label">النقاط</div>
+          <div class="value" id="scoreDisplay">0</div>
+        </div>
+      </div>
+      <div class="stat-box progress">
+        <span class="emoji">📝</span>
+        <div>
+          <div class="label">السؤال</div>
+          <div class="value" id="progressDisplay">1 / 50</div>
+        </div>
+      </div>
+      <div class="stat-box timer">
+        <span class="emoji">⏱️</span>
+        <div>
+          <div class="label">الوقت</div>
+          <div class="value" id="timerDisplay">20</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-fill" id="progressFill" style="width:2%"></div>
+    </div>
+
+    <div class="timer-track">
+      <div class="timer-fill" id="timerFill" style="width:100%"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-number" id="qNumber">السؤال 1 من 50</div>
+      <div class="q-text" id="qText">نص السؤال هنا</div>
+      <div class="answers">
+        <button class="btn-answer btn-true" id="btnTrue" onclick="selectAnswer(true)">✅ صح</button>
+        <button class="btn-answer btn-false" id="btnFalse" onclick="selectAnswer(false)">❌ خطأ</button>
+      </div>
+    </div>
+
+    <button class="btn-check" id="btnCheck" onclick="checkAnswer()">🔍 تحقق من الإجابة</button>
+
+    <div class="feedback" id="feedback">
+      <div class="fb-title" id="fbTitle"></div>
+      <div class="fb-text" id="fbText"></div>
+    </div>
+
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">التالي ⟵</button>
+  </div>
+
+</div>
+
+<!-- CELEBRATION -->
+<div class="celebration" id="celebration">
+  <div class="chars" id="celebEmoji">🎊</div>
+  <h2 id="celebTitle">أحسنت!</h2>
+  <div class="score-label">نتيجتك النهائية</div>
+  <div class="final-score" id="finalScore">0 / 50</div>
+  <div class="grade-badge" id="gradeBadge"></div>
+  <p id="celebMsg"></p>
+  <button class="btn-restart" onclick="restartQuiz()">🔄 إعادة الاختبار</button>
+</div>
+
+<script>
+const questions = [
+  // ============ أسئلة متوسطة الصعوبة ============
+  {q:"التنشئة الاجتماعية عملية تختص فقط بمرحلة الطفولة ولا تمتد إلى ما بعدها.", a:false, r:"التنشئة الاجتماعية عملية مستمرة تبدأ من الطفولة وتستمر حتى الشيخوخة؛ فالفرد في كل مرحلة ينتمي إلى جماعات جديدة يكتسب منها أنماطاً سلوكية جديدة."},
+  {q:"تُعدّ الأسرة من أبرز مؤسسات التنشئة الاجتماعية وأكثرها تأثيراً على الطفل.", a:true, r:"صحيح. الأسرة هي المؤسسة الأولى والأكثر تأثيراً في التنشئة الاجتماعية؛ إذ تسبق جميع المؤسسات الأخرى كالروضة وجماعة اللعب ووسائل الإعلام."},
+  {q:"تعريف 'سعد جلال' للتنشئة الاجتماعية يركز على تشكيل الفرد عن طريق ثقافته حتى يتمكن من الحياة فيها.", a:true, r:"صحيح. عرّفها سعد جلال بأنها 'تشكيل الفرد عن طريق ثقافته حتى يتمكن من الحياة في هذه الثقافة'."},
+  {q:"التنشئة الاجتماعية عملية ثابتة لا تتغير من جيل لآخر.", a:false, r:"خطأ. التنشئة الاجتماعية عملية نمو تتأثر بالبيئة وتتكيف مع متطلبات العصر؛ فتنشئة الأجيال الحالية تختلف عن تنشئة الأجيال السابقة."},
+  {q:"تساعد التنشئة الاجتماعية على المحافظة على القيم والتقاليد في المجتمع.", a:true, r:"صحيح. من أهم نتائج التنشئة الاجتماعية المحافظة على القيم والتقاليد ونقلها من جيل إلى جيل."},
+  {q:"الأسرة الممتدة تضم الأب والأم والأبناء فقط دون سواهم.", a:false, r:"خطأ. الأسرة الممتدة تضم إلى جانب الأب والأم والأبناء الأجداد والأعمام والأقارب الآخرين، على عكس الأسرة النووية التي تقتصر على الأب والأم والأبناء."},
+  {q:"النمو اللغوي للطفل في مرحلة (٣-٦) سنوات يتطور بسرعة كبيرة مما يتيح استثمار هذه الفترة في إكسابه الكلمات والتعبيرات.", a:true, r:"صحيح. في هذه المرحلة يشهد النمو اللغوي للطفل تطوراً سريعاً جداً، وبالاستثمار فيها يمكن إكساب الطفل قدراً كبيراً من الكلمات والتعبيرات."},
+  {q:"الذكاء الوجداني وفق تعريف 'جولدمان' هو القدرة على فهم الانفعالات والتمييز بينها والتعامل معها إيجابياً.", a:true, r:"صحيح. يُعرَّف الذكاء الوجداني (Emotional Intelligence) بأنه القدرة على فهم الانفعالات ومعرفتها والتمييز بينها، والقدرة على ضبطها والتعامل معها بإيجابية."},
+  {q:"وفق نظرية الدور الاجتماعي، يكتسب الطفل الأدوار الاجتماعية بمعزل عن التفاعل مع الآخرين.", a:false, r:"خطأ. يكتسب الطفل الأدوار الاجتماعية عن طريق التفاعل الاجتماعي مع الآباء والراشدين، ولا بد من الارتباط العاطفي (Attachment) لتحقيق ذلك."},
+  {q:"تشير أبحاث 'بلوم' إلى أن مرحلة الطفولة من الميلاد حتى سن ٨ سنوات تشكل ٨٠٪ من مستوى النمو العقلي العام للفرد.", a:true, r:"صحيح. أظهرت دراسة بلوم أن الطفولة من الميلاد حتى سن ٨ سنوات تشكل ٨٠٪ من مستوى النمو العقلي العام للفرد."},
+  // ============ أسئلة صعبة / تريكات ============
+  {q:"في النموذج الأول لنظريات التنشئة الاجتماعية (نموذج Field)، يبدو الفرد فاعلاً ومشاركاً في بناء شخصيته.", a:false, r:"خطأ (تريك!). في النموذج الأول، يبدو الفرد 'مستسلماً سلبياً' (Passive) يُملأ بمحتوى الحضارة، كالإناء الخالي الذي يُملأ. أما الفاعل فهو النموذج الثاني."},
+  {q:"تنطوي التنشئة الاجتماعية الصحيحة على ثلاثة عناصر: أنها أسلوب للتوافق مع الجماعة، وعملية حرجة للفرد والمجتمع، وتساعد على المحافظة على القيم.", a:true, r:"صحيح. هذه هي النقاط الثلاث التي يمكن استخلاصها بعد استعراض مفاهيم وتعاريف التنشئة الاجتماعية."},
+  {q:"نظرية التحليل النفسي ترى أن الأنا الأعلى (Super-Ego) تنشأ من رغبات الهو اللاشعورية مباشرة.", a:false, r:"خطأ. الأنا الأعلى تنشأ من خلال استيعاب أوامر الوالدين والكبار وتوجيهاتهم، وتُمثّل الضمير الأخلاقي الذي يراقب السلوك، وليس من رغبات الهو مباشرة."},
+  {q:"في نظرية التعلم الاجتماعي المبني على التدعيم، يرى 'سكينر' أن الطفل يميل إلى تكرار السلوك الذي حصل فيه على الإثابة.", a:true, r:"صحيح. وفق آراء سكينر، يميل الطفل إلى تكرار السلوك الذي حصل فيه على الإثابة (Rewarded)، ولا يكرر السلوك غير المثاب (Nornrewarded)."},
+  {q:"الذكاء الوجداني لا علاقة له بتنمية الطفل المعرفية أو الاجتماعية، فهو جانب مستقل تماماً.", a:false, r:"خطأ. الذكاء الوجداني يحتل حجر الزاوية في أي تنمية عقلية أو اجتماعية أو معرفية للطفل، وهو مرتبط ارتباطاً وثيقاً بمجمل نموه."},
+  {q:"مفهوم 'منطقة النمو الممكن' (Zone of Proximal Development) لفيجوتسكي يؤكد أن العمر الزمني وحده كافٍ لتحديد مستوى النمو.", a:false, r:"خطأ. يُبيّن هذا المفهوم أنه لا يجب ربط العمر الزمني ربطاً كاملاً بإمكانات النمو المعرفي، وأن العمر لا يمكن الاكتفاء به لتحديد مستوى النمو."},
+  {q:"وفق نظرية الدور الاجتماعي، تعتبر 'الذات' المفهوم الثالث في النظرية لأن الطفل بحاجة إلى تحديد لنفسه ومراجعة سلوكه.", a:true, r:"صحيح. تعتبر الذات المفهوم الثالث في نظرية الدور الاجتماعي بعد المكانة الاجتماعية والدور الاجتماعي."},
+  {q:"في التوجه الثالث لنظريات التعلم الاجتماعي، يرى باندورا وزملاؤه أن الأطفال يقلدون الأب أو الأم من نفس الجنس فقط.", a:false, r:"خطأ (تريك!). يرى باندورا أن الأطفال يقلدون الأب أو الأم من نفس الجنس، ويجدون دعماً ذاتياً كلما اقتربوا من النموذج. لكن في الحقيقة يتعلم الطفل أيضاً من غير المحيطين به مباشرة."},
+  {q:"مرحلة الطفولة المبكرة (٣-٦ سنوات) هي الفترة الأولى التي يتم فيها وضع البذور الأولى للشخصية.", a:true, r:"صحيح. مرحلة الطفولة الباكرة هي الفترة الحاسمة التكوينية للفرد التي يتم فيها وضع البذور الأولى للشخصية التي تتبلور ملامحها في مستقبل الطفل."},
+  {q:"نظرية التحليل النفسي تعتبر أن عملية التنشئة قائمة على التفاعل، وأن الأم تحتل أهمية في مواقف التغذية والإخراج.", a:true, r:"صحيح. ترى نظرية التحليل النفسي أن التنشئة عملية قائمة على التفاعل، وتُضفي مدرسة التحليل النفسي أهمية على الأم خاصة في مواقف التغذية والإخراج والتدريب على الإخراج."},
+  // ======== أسئلة صعبة (تفصيلية) ========
+  {q:"النمو الجسمي للطفل عند نهاية العام الخامس يكون متوسط طول الولد ١٠٨ سم ومتوسط طول البنت ١٠٧ سم.", a:true, r:"صحيح. هذه هي المتوسطات الواردة في الكتاب لنهاية العام الخامس من عمر الطفل."},
+  {q:"وزن الطفل في بداية مرحلة الطفولة المبكرة يكون ١٠ كيلو جرام تقريباً لكلا الجنسين.", a:true, r:"صحيح. في بداية مرحلة الطفولة المبكرة يكون وزن الطفل ١٠ كيلو جرام تقريباً للجنسين."},
+  {q:"النمو الوجداني في مرحلة رياض الأطفال يتميز بأن الطفل يكون في حالة توازن انفعالي تام.", a:false, r:"خطأ. النمو الوجداني في مرحلة رياض الأطفال يتميز بأنها مرحلة 'عدم توازن'؛ إذ يكون الطفل سهل الاستثارة، وتظهر علامات شدة الانفعالات كحدة المزاج وشدة المخاوف وقوة الغيرة."},
+  {q:"'فيجو تسكي' يرى أن الطفل في مراحل العمر الأولى يكون متمركزاً حول ذاته كما يرى بياجيه.", a:false, r:"خطأ (تريك دقيق!). يشير فيجو تسكي إلى أن الطفل في مراحل العمر الأولى ليس متمركزاً حول ذاته كما يرى بياجيه، بل إنه يجمع في أصله بين الاجتماعية والتواصلية."},
+  {q:"يستطيع الطفل في نهاية مرحلة الطفولة المبكرة القفز على الحجل برجل واحدة والقفز والطفر والوثب على درجتين من درجات السلم في المرة الواحدة.", a:true, r:"صحيح. هذه من مظاهر النمو الحركي في نهاية المرحلة (عند الخامسة أو السادسة)."},
+  {q:"القاعدة الأساسية في تطور خلايا الدماغ هي: 'كلما زادت الخبرات تناقصت الأغصان'.", a:false, r:"خطأ. القاعدة الأساسية هي (Use It Or Lose It) أي 'كلما زاد التعلم الكفيء زادت كثافة الأغصان (Dendrites)'. الخلايا التي لا تُستخدم تموت وتحل محلها أغصان لخلايا أخرى."},
+  {q:"نافذة الفرص (Windows Opportunities) تشير إلى أن الطفولة المبكرة حتى سن ٨ سنوات هي الأهم للتعليم والنمو.", a:true, r:"صحيح. مفهوم نوافذ الفرص يشير إلى أن هناك فترات حساسة في النمو لتعليم مهارات معينة، والطفولة المبكرة وحتى سن ٨ سنوات هي أهم هذه الفترات."},
+  {q:"وفق 'كارين هوفمان'، مشكلات الأطفال التعليمية في الوقت الحاضر ترجع إلى نقص المعلومات وضعف القاعدة المعرفية.", a:false, r:"خطأ. تؤكد كارين هوفمان أن مشكلات الأطفال لا تكمن في نقص المعلومات بل في عدم معرفتهم لكيفية استخدام المعلومات وتوظيفها على نحو أمثل."},
+  {q:"تفكير الطفل في مرحلة ما قبل العمليات (٢-٧ سنوات) يتضمن عمليات تحليل وتفسير منطقية متسقة.", a:false, r:"خطأ. في هذه المرحلة يستطيع الطفل تمثّل الأشياء عقلياً ويتخيل النتائج الصحيحة، لكنه لا يستطيع تفسيرها. ويحتاج التفكير إلى التوجيه إذ يقوم بتكرار تفسيرات غير مترابطة."},
+  {q:"مهارات الذكاء الوجداني الواجب تنميتها في الطفل تشمل: التحكم بردود الفعل العفوية، والاهتمام بتمييز الانفعالات وتسميتها.", a:true, r:"صحيح. هذه من أبرز مهارات الذكاء الوجداني التي يجب تنميتها لدى الطفل وفق ما حدده الكتاب."},
+  {q:"النمو الحسي الحركي للطفل في بداية مرحلة رياض الأطفال يتميز بالاستجابة للمثير ككل لا إلى أجزائه المنفصلة.", a:true, r:"صحيح. الطفل في بداية المرحلة يميل إلى الاستجابة للمثير ككل لا إلى أجزائه المنفصلة، وينمو لديه الإدراك المكاني."},
+  // ===== تريكات دقيقة جداً =====
+  {q:"النموذج الثاني في نظريات التنشئة الاجتماعية يرى أن الفرد يبدو مستسلماً لأن ثقافته تُسكب فيه كالإناء.", a:false, r:"خطأ (تريك!). هذا وصف النموذج الأول لا الثاني. النموذج الثاني (Conformity) يرى أن التنشئة ليست كجهاز قهري بل طوعي الانقياد؛ الفرد فاعل مشغول ببناء الواقع المحيط."},
+  {q:"تعريف التنشئة الاجتماعية وفق 'محمود السيد أبو النيل' هو: كل الأساليب التي يتلقاها الفرد من الأسرة خاصة الوالدين والمحيطين لبناء شخصية نامية.", a:true, r:"صحيح. هذا هو تعريف التنشئة الاجتماعية المنسوب في الكتاب إلى محمود السيد أبو النيل."},
+  {q:"العلاقة بين الوجدان والتفكير هي أن التفكير الإيجابي يُعيق الوجدان ويُضعف التعلم.", a:false, r:"خطأ. العلاقة عكسية تماماً: عندما تتلازم الخبرة بانفعال إيجابي (فرح-إنجاز) يزداد إتقان المعلومة وتخزينها واسترجاعها. والوجدان والتفكير متداخلان تداخلاً وثيقاً."},
+  {q:"مفهوم 'الاتجاه الأول' في نظريات التعلم الاجتماعي يقوم على فكرة النموذج (Model) كأسلوب للتعلم.", a:false, r:"خطأ (تريك!). فكرة النموذج (Model) هي أساس التوجه الثالث (باندورا ووالتر وبارك). أما الاتجاه الأول فيقوم على فكرة المنبه أو الإثارة (مثير/استجابة) كما قدمه ميلر ودولارد وسيرز."},
+  {q:"في الخصائص الخمس للتنشئة الاجتماعية، تُصنّف على أنها: عملية تعلم اجتماعي، عملية نمو، عملية مستمرة، عملية تربوية، عملية دينامية.", a:true, r:"صحيح. هذه هي الخصائص الخمس للتنشئة الاجتماعية التي وردت في الكتاب."},
+  {q:"الطفل في مرحلة الطفولة المبكرة يُعدّ متمركزاً حول المجتمع وليس حول ذاته وفق بياجيه.", a:false, r:"خطأ. وفق بياجيه، الطفل في مرحلة ما قبل العمليات يكون متمركزاً حول ذاته. وهو ما عارضه فيجو تسكي بقوله إن الطفل يجمع بين الاجتماعية والتواصلية في أصله."},
+  {q:"كلام الطفل مع نفسه (الكلام الداخلي) يظهر مع بداية العمر بشكل تام وسيطر عليه.", a:false, r:"خطأ. اللغة في بداية العمر لا يكون الطفل مسيطراً عليها تاماً؛ لكن مع سن الرابعة تقريباً يبدأ بالحديث عن نفسه والتفكير في نفسه، ويستخدم الكلام الداخلي للإثارة الذاتية."},
+  {q:"وفق الكتاب، تُعدّ اللغة أداةً وحيدة للتفكير لا تحتاج إلى دمج مع الوجدان أو الجانب الاجتماعي.", a:false, r:"خطأ. اللغة هي وسيلة التواصل الاجتماعي والتفكير معاً، وتبدأ نموها منفصلة ثم تتقابل وتتداخل مع التفكير بحيث يبدأ الطفل في اكتساب المفاهيم وينتقل للتفكير الرمزي."},
+  {q:"النمو الجسمي الفسيولوجي يتضمن أن الجهاز العصبي يتوقف عن النمو في مرحلة الطفولة المبكرة.", a:false, r:"خطأ. الجهاز العصبي هو أكثر أجهزة الجسم استمراراً في النمو في هذه المرحلة. ويتقدم لحاء المخ ما يفسر السرعة والسهولة في اكتساب المعلومات."},
+  {q:"وفق 'دانيال' (Daniel)، تنمية مهارات الذكاء الوجداني تفضي إلى شخصية سوية قادرة على تحمل المسؤولية وحل المشكلات والاتزان.", a:true, r:"صحيح. يؤكد دانيال أن تنمية هذه المهارات الوجدانية تُسفر عن إنتاج الشخصية السوية المتزنة القادرة على تحمل المسؤولية وتأكيد الذات وحل المشكلات."},
+  // ===== أسئلة تريكية جداً =====
+  {q:"تعريف الدور الاجتماعي (Social Role) هو وضع الفرد في بناء اجتماعي وترتيبه به وما يرتبط بكل مكانة من حقوق والتزامات.", a:false, r:"خطأ (تريك!). هذا تعريف المكانة الاجتماعية (Social Status). أما الدور الاجتماعي فهو السلوك المتوقع من صاحب المكانة، ويتضمن جوانب السلوك المتوقع ومعرفة مشاعر ذلك الغير وقيماً تحددها الثقافة."},
+  {q:"الإناث في مرحلة الطفولة المبكرة يتفوقن على الذكور في المحصول اللغوي وفي معظم جوانب النمو اللغوي.", a:true, r:"صحيح. من الملاحظ في هذه المرحلة أن الإناث يتفوقن على الذكور في المحصول اللغوي وفي معظم جوانب النمو اللغوي."},
+  {q:"وفق الكتاب، يُعدّ الذكور أكثر تفوقاً من الإناث في مهارات التعبير اللفظي في مرحلة الطفولة المبكرة.", a:false, r:"خطأ. الإناث يتفوقن على الذكور في مهارات التعبير، أما الذكور فيتفوقون بمقدار بسيط في المحصول اللغوي ومعرفة معاني الكلمات."},
+  {q:"في نظرية التحليل النفسي، تمثّل 'الأنا' (Ego) مبدأ اللذة وتسعى دائماً لتحقيقها.", a:false, r:"خطأ (تريك!). مبدأ اللذة هو مبدأ 'الهو' (Id) لا الأنا. أما 'الأنا' فتعمل في نطاق الظروف التي يفرضها المجتمع والبيئة لتحقيق رغبات الهو دون مخالفة القيم والتقاليد."},
+  {q:"يُقال إن الفترة من (٣-٦) سنوات هي 'العمر الحرج' في عملية التطبيع الاجتماعي للطفل.", a:true, r:"صحيح. تُعدّ الفترة من (٣-٦) سنوات هي العمر الحرج في عملية التطبيع الاجتماعي للطفل."},
+  {q:"أظهرت اختبارات 'بوير' (Boyer) ومارتاتسوس أن أطفال بياجيه يدركون أكثر مما يعتقده بياجيه، وأن التفكير يبدأ مبكراً من سن السابعة.", a:true, r:"صحيح. أشارت دراسات بوير ومارتاتسوس إلى أن الطفل يدرك أكثر مما يعتقد بياجيه، وأن الأطفال من سن السابعة يمكنهم النجاح في مهام التفكير المتنوعة."},
+  {q:"التنشئة الاجتماعية هي عملية تعلم اجتماعي فقط وليست أبداً عملية نمو.", a:false, r:"خطأ. التنشئة الاجتماعية ليست فقط عملية تعلم اجتماعي، بل هي أيضاً عملية نمو تتأثر بالبيئة، وعملية مستمرة وتربوية ودينامية."},
+  {q:"كلام الطفل مع نفسه (الكلام الداخلي) يساعده على التخفيف من التوتر وعلى تنظيم السلوك.", a:true, r:"صحيح. يساعد كلام الطفل مع نفسه على التخفيف من التوتر وعلى تنظيم السلوك، ويمثل مرحلة التحول من مرحلة اللغة إلى مرحلة الفكر اللغوي."},
+  {q:"وفق الكتاب، في عملية التعلم المباشر (Direct Learning) في إطار نظرية الدور الاجتماعي، يقوم الوالدان بتعليم أبنائهما السلوك المناسب لجنسه فقط.", a:false, r:"خطأ. التعلم المباشر يشمل تعليم السلوك المناسب لجنسه وسنه وعمره ومستوى نضجه، وليس الجنس فقط."},
+  {q:"يرى 'برونز' أن البيئة والخبرات الموجهة والمعارف المختلفة هي المدخل الرئيسي لتنمية التفكير ووظائفه ومهاراته لدى الطفل.", a:true, r:"صحيح. يشير برونز إلى أهمية البيئة ودورها في تعليم وإكساب الطفل المهارات والمعارف المختلفة، وأن الخبرات الموجهة والثقافة هي المدخل الرئيسي لتنمية التفكير."},
+  {q:"في التنشئة الاجتماعية، ضبط الطفل لسلوكه يتبع عوامل محددة فقط كثقافة الأسرة، وعليه فإن الاختلاف في السلوك بين الأفراد من أسر مختلفة أمر طبيعي.", a:true, r:"صحيح. ضبط السلوك يتبع عوامل عديدة منها ثقافة الأسرة والاتجاهات نحو الطفل، ولما كانت هذه الثقافة والاتجاهات مختلفة من أسرة لأخرى نجد الاختلاف في السلوك بين فرد وآخر."},
+  {q:"قاعدة 'Use It Or Lose It' تعني أن الخلايا العصبية إذا لم تُستخدم تنمو بدرجة أكبر.", a:false, r:"خطأ. 'Use It Or Lose It' تعني أن الخلايا العصبية إذا لم يُتح لها فرص العمل والاستعمال فإنها تموت، وليس العكس."},
+  {q:"النمو الاجتماعي السليم للطفل يُتيح له أن يكون أكثر اعتماداً على والديه في علاقاته مع أقرانه.", a:false, r:"خطأ. النمو الاجتماعي السليم يجعل الطفل أكثر استقلالاً وأقل اعتماداً على والديه في علاقاته الاجتماعية الخارجية."},
+  {q:"وفق 'دانيال'، يكفي تعليم الأطفال المهارات الأكاديمية (كالحساب واللغة) دون الاهتمام بتنمية مهاراتهم الوجدانية لإعدادهم للحياة.", a:false, r:"خطأ. يؤكد دانيال أن المهارات الوجدانية جزء رئيسي من البناء النفسي للإنسان لا يمكن إغفاله. فالوجدان والانفعالات هي جزء رئيسي في بنائنا النفسي تماماً كما نتعلم المهارات الأكاديمية."},
+];
+
+let currentQ = 0;
+let score = 0;
+let selectedAnswer = null;
+let timerInterval = null;
+let timeLeft = 20;
+let answered = false;
+
+function startQuiz() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizArea').classList.add('active');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  selectedAnswer = null;
+  const q = questions[currentQ];
+
+  document.getElementById('qNumber').textContent = `السؤال ${currentQ+1} من 50`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progressDisplay').textContent = `${currentQ+1} / 50`;
+  document.getElementById('progressFill').style.width = `${((currentQ)/50)*100}%`;
+
+  // Reset buttons
+  const btnTrue = document.getElementById('btnTrue');
+  const btnFalse = document.getElementById('btnFalse');
+  btnTrue.classList.remove('selected-true','selected-false','revealed-correct','revealed-wrong');
+  btnFalse.classList.remove('selected-true','selected-false','revealed-correct','revealed-wrong');
+  btnTrue.disabled = false;
+  btnFalse.disabled = false;
+
+  // Reset feedback & buttons
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('btnCheck').className = 'btn-check';
+  document.getElementById('btnNext').className = 'btn-next';
+
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 20;
+  updateTimerDisplay();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft <= 0) {
+      clearInterval(timerInterval);
+      if(!answered) autoFail();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  document.getElementById('timerDisplay').textContent = timeLeft;
+  const pct = (timeLeft/20)*100;
+  const fill = document.getElementById('timerFill');
+  fill.style.width = pct + '%';
+  fill.className = 'timer-fill';
+  if(timeLeft <= 10) fill.classList.add('warning');
+  if(timeLeft <= 5) fill.classList.add('danger');
+}
+
+function autoFail() {
+  answered = true;
+  document.getElementById('btnTrue').disabled = true;
+  document.getElementById('btnFalse').disabled = true;
+  showFeedback(false, null);
+  document.getElementById('btnNext').classList.add('visible');
+}
+
+function selectAnswer(val) {
+  if(answered) return;
+  selectedAnswer = val;
+  const btnTrue = document.getElementById('btnTrue');
+  const btnFalse = document.getElementById('btnFalse');
+  btnTrue.classList.remove('selected-true','selected-false');
+  btnFalse.classList.remove('selected-true','selected-false');
+  if(val) btnTrue.classList.add('selected-true');
+  else btnFalse.classList.add('selected-false');
+  document.getElementById('btnCheck').classList.add('visible');
+}
+
+function checkAnswer() {
+  if(selectedAnswer === null || answered) return;
+  clearInterval(timerInterval);
+  answered = true;
+
+  const q = questions[currentQ];
+  const correct = selectedAnswer === q.a;
+  if(correct) score++;
+
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('btnTrue').disabled = true;
+  document.getElementById('btnFalse').disabled = true;
+  document.getElementById('btnCheck').className = 'btn-check';
+
+  // Reveal correct/wrong
+  const btnTrue = document.getElementById('btnTrue');
+  const btnFalse = document.getElementById('btnFalse');
+  if(q.a === true) {
+    btnTrue.classList.add('revealed-correct');
+    btnFalse.classList.add('revealed-wrong');
+  } else {
+    btnFalse.classList.add('revealed-correct');
+    btnTrue.classList.add('revealed-wrong');
+  }
+
+  showFeedback(correct, q.r);
+  document.getElementById('btnNext').classList.add('visible');
+}
+
+function showFeedback(correct, rationale) {
+  const fb = document.getElementById('feedback');
+  const title = document.getElementById('fbTitle');
+  const text = document.getElementById('fbText');
+
+  if(selectedAnswer === null) {
+    fb.className = 'feedback wrong visible';
+    title.textContent = '⏰ انتهى الوقت!';
+    text.textContent = `الإجابة الصحيحة: ${questions[currentQ].a ? 'صح ✅' : 'خطأ ❌'} — ${questions[currentQ].r}`;
+  } else if(correct) {
+    fb.className = 'feedback correct visible';
+    title.textContent = '🎉 أحسنت! إجابة صحيحة!';
+    text.textContent = rationale;
+  } else {
+    fb.className = 'feedback wrong visible';
+    title.textContent = '❌ إجابة خاطئة';
+    text.textContent = `التصحيح: ${rationale}`;
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  if(currentQ >= questions.length) {
+    showCelebration();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showCelebration() {
+  clearInterval(timerInterval);
+  launchConfetti();
+  const pct = Math.round((score/50)*100);
+  let emoji, title, msg, color;
+
+  if(pct >= 90) { emoji='🏆🌟'; title='ممتاز! أنت نجم!'; msg='أداء استثنائي! أنت تستحق تقدير أستاذ الجامعة 😍'; color='#7C5CBF'; }
+  else if(pct >= 75) { emoji='🎊🥳'; title='جيد جداً!'; msg='نتيجة رائعة! استمر في المذاكرة وستصل للقمة 💪'; color='#4CAF50'; }
+  else if(pct >= 60) { emoji='😊📚'; title='جيد!'; msg='نتيجة مقبولة، راجع نقاط ضعفك وأعد الاختبار 📖'; color='#FF9944'; }
+  else { emoji='💪🔄'; title='حاول مجدداً!'; msg='لا بأس! راجع الملاحظات واختبر نفسك من جديد 🌱'; color='#FF6B6B'; }
+
+  document.getElementById('celebEmoji').textContent = emoji;
+  document.getElementById('celebTitle').textContent = title;
+  document.getElementById('finalScore').textContent = `${score} / 50`;
+  document.getElementById('celebMsg').textContent = msg;
+
+  const badge = document.getElementById('gradeBadge');
+  badge.textContent = `${pct}%`;
+  badge.style.background = color;
+  badge.style.color = 'white';
+
+  document.getElementById('celebration').classList.add('show');
+}
+
+function launchConfetti() {
+  const colors = ['#FFB3C6','#C9B8E8','#B5EAD7','#FFDAC1','#AED9E0','#FFF1A8'];
+  for(let i=0;i<80;i++) {
+    setTimeout(()=>{
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random()*100+'vw';
+      el.style.top = '-20px';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.width = (8+Math.random()*10)+'px';
+      el.style.height = (8+Math.random()*10)+'px';
+      el.style.animationDuration = (2+Math.random()*3)+'s';
+      el.style.animationDelay = Math.random()*0.5+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 5000);
+    }, i*50);
+  }
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  score = 0;
+  document.getElementById('celebration').classList.remove('show');
+  document.getElementById('scoreDisplay').textContent = '0';
+  loadQuestion();
+}
+</script>
+</body>
+</html>
